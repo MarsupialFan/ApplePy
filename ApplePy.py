@@ -66,14 +66,9 @@ class Application:
 
     def is_running(self) -> bool:
         """Check if the application is currently running."""
-
-        script = AppleScript(f'''
-            tell application "System Events"
-                set isRunning to exists (process "{self.name}")
-            end tell
-            return isRunning
-            ''')
-        return script.run().lower() == 'true'
+        system_events = Application("System Events")
+        is_running = system_events._run_simple_statement(f'exists (process "{self.name}")')
+        return is_running.lower() == 'true'
 
     def get_number_of_windows(self) -> int:
         """Retrieve the number of this application's windows."""
