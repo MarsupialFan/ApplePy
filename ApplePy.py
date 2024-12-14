@@ -24,7 +24,7 @@ class AppleScript:
 
         Returns:
             str: The output of the AppleScript command.
-        
+
         Raises:
             RuntimeError: If the script execution fails.
         """
@@ -42,19 +42,20 @@ class AppleScript:
 class Application:
     def __init__(self, name: str) -> None:
         self.name = name
-    
+
+    def _run_simple_statement(self, statement) -> str:
+        """Sends the given simple statement to the application."""
+        script = AppleScript(f'tell application "{self.name}" to {statement}')
+        return script.run()
+
     def activate(self) -> None:
         """Bring the application to the foreground."""
+        self._run_simple_statement('activate')
 
-        script = AppleScript(f'tell application "{self.name}" to activate')
-        script.run()
-    
     def quit(self) -> None:
         """Quit the application."""
+        self._run_simple_statement('quit')
 
-        script = AppleScript(f'tell application "{self.name}" to quit')
-        script.run()
-    
     def is_running(self) -> bool:
         """Check if the application is currently running."""
 
@@ -66,10 +67,10 @@ class Application:
             ''')
         return script.run().lower() == 'true'
 
-        
+
     def get_windows(self) -> List[str]:
         """Retrieve the list of all window names of the application."""
-    
+
         script = AppleScript(f'''
             tell application "{self.name}"
                 get the name of every window
