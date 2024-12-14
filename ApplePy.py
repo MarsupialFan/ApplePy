@@ -75,6 +75,9 @@ class Application:
             ''')
         return script.run().lower() == 'true'
 
+    def get_number_of_windows(self) -> int:
+        """Retrieve the number of this application's windows."""
+        return int(self._run_simple_statement('get the number of windows'))
 
     def get_windows(self) -> List[str]:
         """Retrieve the list of all window names of the application."""
