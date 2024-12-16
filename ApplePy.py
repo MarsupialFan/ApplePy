@@ -48,11 +48,12 @@ class Application:
         script = AppleScript(f'tell application "{self.name}" to {statement}')
         return script.run()
 
-    def _run_compound_statement(self, statement) -> str:
+    def _run_compound_statement(self, statements) -> str:
         """Sends the given compound statement to the application."""
+        combined_statements = '\n'.join(statements)
         script = AppleScript(f'''
             tell application "{self.name}"
-                {statement}
+                {combined_statements}
             end tell''')
         return script.run()
 
@@ -76,5 +77,5 @@ class Application:
 
     def get_windows(self) -> List[str]:
         """Retrieve the list of all window names of the application."""
-        windows_str = self._run_compound_statement('get the name of every window')
+        windows_str = self._run_compound_statement(['get the name of every window'])
         return windows_str.split(', ') if windows_str else []
